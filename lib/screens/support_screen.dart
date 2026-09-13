@@ -24,112 +24,115 @@ class SupportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.currentLanguage,
-      builder: (context, lang, _) => Scaffold(
-        backgroundColor: const Color(0xFF0B2B26),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF143B32),
-          title: Text(LanguageManager.t('support_title'),
-              style: const TextStyle(color: Color(0xFFD4AF37))),
-          centerTitle: true,
-          iconTheme: const IconThemeData(color: Color(0xFFD4AF37)),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // بطاقة ترحيبية
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF1E4D40), Color(0xFF0B2B26)],
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
+      builder: (context, lang, _) => Directionality(
+        textDirection: LanguageManager.isRTL() ? TextDirection.rtl : TextDirection.ltr,
+        child: Scaffold(
+          backgroundColor: const Color(0xFF0B2B26),
+          appBar: AppBar(
+            backgroundColor: const Color(0xFF143B32),
+            title: Text(LanguageManager.t('support_title'),
+                style: const TextStyle(color: Color(0xFFD4AF37))),
+            centerTitle: true,
+            iconTheme: const IconThemeData(color: Color(0xFFD4AF37)),
+          ),
+          body: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // بطاقة ترحيبية
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF1E4D40), Color(0xFF0B2B26)],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFD4AF37), width: 1),
                 ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFD4AF37), width: 1),
+                child: Column(
+                  children: [
+                    const Icon(Icons.support_agent, color: Color(0xFFD4AF37), size: 48),
+                    const SizedBox(height: 12),
+                    Text(LanguageManager.t('support_welcome'),
+                        style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center),
+                    const SizedBox(height: 8),
+                    Text(LanguageManager.t('support_desc'),
+                        style: const TextStyle(color: Colors.white70, fontSize: 13),
+                        textAlign: TextAlign.center),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  const Icon(Icons.support_agent, color: Color(0xFFD4AF37), size: 48),
-                  const SizedBox(height: 12),
-                  Text(LanguageManager.t('support_welcome'),
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center),
-                  const SizedBox(height: 8),
-                  Text(LanguageManager.t('support_desc'),
-                      style: const TextStyle(color: Colors.white70, fontSize: 13),
-                      textAlign: TextAlign.center),
-                ],
+              const SizedBox(height: 24),
+
+              Text(LanguageManager.t('contact_us'),
+                  style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+
+              // WhatsApp 1
+              _linkCard(
+                context: context,
+                icon: Icons.chat,
+                iconColor: const Color(0xFF25D366),
+                title: 'WhatsApp',
+                subtitle: '+971 50 115 9417',
+                url: 'https://wa.me/971501159417',
               ),
-            ),
-            const SizedBox(height: 24),
-
-            Text(LanguageManager.t('contact_us'),
-                style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-
-            // WhatsApp 1
-            _linkCard(
-              context: context,
-              icon: Icons.chat,
-              iconColor: const Color(0xFF25D366),
-              title: 'WhatsApp',
-              subtitle: '+971 50 115 9417',
-              url: 'https://wa.me/971501159417',
-            ),
-            // WhatsApp 2
-            _linkCard(
-              context: context,
-              icon: Icons.chat,
-              iconColor: const Color(0xFF25D366),
-              title: 'WhatsApp',
-              subtitle: '+971 55 217 3597',
-              url: 'https://wa.me/971552173597',
-            ),
-            // Gmail 1
-            _linkCard(
-              context: context,
-              icon: Icons.email,
-              iconColor: const Color(0xFFEA4335),
-              title: 'Gmail',
-              subtitle: 'abdelrahmenbenromdhan11@gmail.com',
-              url: 'mailto:abdelrahmenbenromdhan11@gmail.com?subject=Noor Al-Hidayah Support',
-            ),
-            // Gmail 2
-            _linkCard(
-              context: context,
-              icon: Icons.email,
-              iconColor: const Color(0xFFEA4335),
-              title: 'Gmail',
-              subtitle: 'nooralimanechannel@gmail.com',
-              url: 'mailto:nooralimanechannel@gmail.com?subject=Noor Al-Hidayah Support',
-            ),
-            // YouTube
-            _linkCard(
-              context: context,
-              icon: Icons.play_circle_fill,
-              iconColor: const Color(0xFFFF0000),
-              title: 'YouTube',
-              subtitle: '@nooralhidayahoff',
-              url: 'https://youtube.com/@nooralhidayahoff?si=YpXMLXowlgVaLN-j',
-            ),
-
-            const SizedBox(height: 30),
-
-            // زر تقييم التطبيق
-            ElevatedButton.icon(
-              onPressed: () => _open(context, 'https://play.google.com/store/apps'),
-              icon: const Icon(Icons.star),
-              label: Text(LanguageManager.t('rate_app'),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFD4AF37),
-                foregroundColor: const Color(0xFF0B2B26),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              // WhatsApp 2
+              _linkCard(
+                context: context,
+                icon: Icons.chat,
+                iconColor: const Color(0xFF25D366),
+                title: 'WhatsApp',
+                subtitle: '+971 55 217 3597',
+                url: 'https://wa.me/971552173597',
               ),
-            ),
-          ],
+              // Gmail 1
+              _linkCard(
+                context: context,
+                icon: Icons.email,
+                iconColor: const Color(0xFFEA4335),
+                title: 'Gmail',
+                subtitle: 'abdelrahmenbenromdhan11@gmail.com',
+                url: 'mailto:abdelrahmenbenromdhan11@gmail.com?subject=Noor Al-Hidayah Support',
+              ),
+              // Gmail 2
+              _linkCard(
+                context: context,
+                icon: Icons.email,
+                iconColor: const Color(0xFFEA4335),
+                title: 'Gmail',
+                subtitle: 'nooralimanechannel@gmail.com',
+                url: 'mailto:nooralimanechannel@gmail.com?subject=Noor Al-Hidayah Support',
+              ),
+              // YouTube
+              _linkCard(
+                context: context,
+                icon: Icons.play_circle_fill,
+                iconColor: const Color(0xFFFF0000),
+                title: 'YouTube',
+                subtitle: '@nooralhidayahoff',
+                url: 'https://youtube.com/@nooralhidayahoff?si=YpXMLXowlgVaLN-j',
+              ),
+
+              const SizedBox(height: 30),
+
+              // زر تقييم التطبيق
+              ElevatedButton.icon(
+                onPressed: () => _open(context, 'https://play.google.com/store/apps'),
+                icon: const Icon(Icons.star),
+                label: Text(LanguageManager.t('rate_app'),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFD4AF37),
+                  foregroundColor: const Color(0xFF0B2B26),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
 import 'screens/prayer_times_screen.dart';
@@ -9,12 +8,16 @@ import 'screens/quran_screen.dart';
 import 'screens/quiz_screen.dart';
 import 'screens/community_screen.dart';
 import 'screens/settings_screen.dart';
-import 'services/auth_service.dart';
 import 'i18n/language_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    print('✅ Firebase OK');
+  } catch (e) {
+    print('❌ Firebase failed: $e');
+  }
   runApp(const NoorAlHidayahApp());
 }
 
@@ -40,23 +43,59 @@ class NoorAlHidayahApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: StreamBuilder<User?>(
-            stream: AuthService().authStateChanges,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  backgroundColor: Color(0xFF0B2B26),
-                  body: Center(child: CircularProgressIndicator(color: Color(0xFFD4AF37))),
-                );
-              }
-              if (snapshot.hasData) {
-                return const MainScreen();
-              }
-              return const LoginScreen();
-            },
-          ),
+          home: const _RootScreen(),
         );
       },
+    );
+  }
+}
+
+class _RootScreen extends StatefulWidget {
+  const _RootScreen();
+  @override
+  State<_RootScreen> createState() => _RootScreenState();
+}
+
+class _RootScreenState extends State<_RootScreen> {
+  bool _skipLogin = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_skipLogin) return const MainScreen();
+
+    return Stack(
+      children: [
+        const LoginScreen(),
+        // زر تخطي صغير
+        Positioned(
+          bottom: 15,
+          left: 15,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => setState(() => _skipLogin = true),
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF143B32),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.5)),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('تخطي / Skip',
+                        style: TextStyle(color: Color(0xFFD4AF37), fontSize: 12, fontWeight: FontWeight.bold)),
+                    SizedBox(width: 4),
+                    Icon(Icons.skip_next, color: Color(0xFFD4AF37), size: 16),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -94,6 +133,15 @@ class _MainScreenState extends State<MainScreen> {
               ),
               centerTitle: true,
               actions: [
+                IconButton(
+                  icon: const Icon(Icons.translate, color: Color(0xFFD4AF37)),
+                  tooltip: 'Language',
+                  onPressed: () {
+                    LanguageManager.setLanguage(
+                      LanguageManager.currentLanguage.value == 'ar' ? 'en' : 'ar',
+                    );
+                  },
+                ),
                 IconButton(
                   icon: const Icon(Icons.settings, color: Color(0xFFD4AF37)),
                   onPressed: () => Navigator.push(context,
