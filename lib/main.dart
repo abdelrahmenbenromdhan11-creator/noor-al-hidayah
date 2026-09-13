@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
+import 'screens/login_screen.dart';
 import 'screens/prayer_times_screen.dart';
 import 'screens/adhkar_screen.dart';
 import 'screens/quran_screen.dart';
 import 'screens/quiz_screen.dart';
 import 'screens/community_screen.dart';
 import 'screens/settings_screen.dart';
+import 'services/auth_service.dart';
 import 'i18n/language_manager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const NoorAlHidayahApp());
 }
 
@@ -33,7 +40,21 @@ class NoorAlHidayahApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const MainScreen(),
+          home: StreamBuilder<User?>(
+            stream: AuthService().authStateChanges,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                  backgroundColor: Color(0xFF0B2B26),
+                  body: Center(child: CircularProgressIndicator(color: Color(0xFFD4AF37))),
+                );
+              }
+              if (snapshot.hasData) {
+                return const MainScreen();
+              }
+              return const LoginScreen();
+            },
+          ),
         );
       },
     );
@@ -75,13 +96,8 @@ class _MainScreenState extends State<MainScreen> {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.settings, color: Color(0xFFD4AF37)),
-                  tooltip: LanguageManager.t('settings'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                    );
-                  },
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const SettingsScreen())),
                 ),
               ],
             ),
