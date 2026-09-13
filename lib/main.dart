@@ -3,7 +3,9 @@ import 'screens/prayer_times_screen.dart';
 import 'screens/adhkar_screen.dart';
 import 'screens/quran_screen.dart';
 import 'screens/quiz_screen.dart';
-import 'screens/placeholder_screens.dart';
+import 'screens/community_screen.dart';
+import 'screens/settings_screen.dart';
+import 'i18n/language_manager.dart';
 
 void main() {
   runApp(const NoorAlHidayahApp());
@@ -14,20 +16,26 @@ class NoorAlHidayahApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Noor Al-Hidayah',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: const Color(0xFF0B2B26),
-        scaffoldBackgroundColor: const Color(0xFF0B2B26),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFD4AF37),
-          secondary: Color(0xFF1E4D40),
-          surface: Color(0xFF143B32),
-        ),
-        useMaterial3: true,
-      ),
-      home: const MainScreen(),
+    return ValueListenableBuilder<String>(
+      valueListenable: LanguageManager.currentLanguage,
+      builder: (context, lang, _) {
+        return MaterialApp(
+          title: LanguageManager.t('app_name'),
+          debugShowCheckedModeBanner: false,
+          locale: Locale(lang),
+          theme: ThemeData(
+            primaryColor: const Color(0xFF0B2B26),
+            scaffoldBackgroundColor: const Color(0xFF0B2B26),
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFFD4AF37),
+              secondary: Color(0xFF1E4D40),
+              surface: Color(0xFF143B32),
+            ),
+            useMaterial3: true,
+          ),
+          home: const MainScreen(),
+        );
+      },
     );
   }
 }
@@ -51,34 +59,51 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF143B32),
-          title: const Text(
-            'نور الهداية | Noor Al-Hidayah',
-            style: TextStyle(color: Color(0xFFD4AF37), fontWeight: FontWeight.bold),
+    return ValueListenableBuilder<String>(
+      valueListenable: LanguageManager.currentLanguage,
+      builder: (context, lang, _) {
+        return Directionality(
+          textDirection: LanguageManager.isRTL() ? TextDirection.rtl : TextDirection.ltr,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color(0xFF143B32),
+              title: Text(
+                '${LanguageManager.t('app_name')} | Noor Al-Hidayah',
+                style: const TextStyle(color: Color(0xFFD4AF37), fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings, color: Color(0xFFD4AF37)),
+                  tooltip: LanguageManager.t('settings'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                    );
+                  },
+                ),
+              ],
+            ),
+            body: _pages[_currentIndex],
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (index) => setState(() => _currentIndex = index),
+              backgroundColor: const Color(0xFF143B32),
+              selectedItemColor: const Color(0xFFD4AF37),
+              unselectedItemColor: Colors.white54,
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(icon: const Icon(Icons.mosque), label: LanguageManager.t('prayer')),
+                BottomNavigationBarItem(icon: const Icon(Icons.menu_book), label: LanguageManager.t('quran')),
+                BottomNavigationBarItem(icon: const Icon(Icons.favorite), label: LanguageManager.t('adhkar')),
+                BottomNavigationBarItem(icon: const Icon(Icons.emoji_events), label: LanguageManager.t('challenge')),
+                BottomNavigationBarItem(icon: const Icon(Icons.people), label: LanguageManager.t('community')),
+              ],
+            ),
           ),
-          centerTitle: true,
-        ),
-        body: _pages[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          backgroundColor: const Color(0xFF143B32),
-          selectedItemColor: const Color(0xFFD4AF37),
-          unselectedItemColor: Colors.white54,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.mosque), label: 'الصلاة'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'القرآن'),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'الأذكار'),
-            BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: 'التحدي'),
-            BottomNavigationBarItem(icon: Icon(Icons.people), label: 'المجتمع'),
-          ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

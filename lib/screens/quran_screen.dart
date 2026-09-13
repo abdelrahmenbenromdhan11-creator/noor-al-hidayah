@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../i18n/language_manager.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'quran_detail_screen.dart';
@@ -46,7 +47,9 @@ class _QuranScreenState extends State<QuranScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ValueListenableBuilder<String>(
+      valueListenable: LanguageManager.currentLanguage,
+      builder: (context, lang, _) => Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -55,7 +58,7 @@ class _QuranScreenState extends State<QuranScreen> {
             onChanged: _filter,
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              hintText: 'ابحث عن سورة...',
+              hintText: LanguageManager.t('chapter_search'),
               hintStyle: const TextStyle(color: Colors.white54),
               prefixIcon: const Icon(Icons.search, color: Color(0xFFD4AF37)),
               filled: true,
@@ -97,8 +100,8 @@ class _QuranScreenState extends State<QuranScreen> {
                               style: const TextStyle(color: Color(0xFFD4AF37), fontWeight: FontWeight.bold)),
                         ),
                       ),
-                      title: Text(s['name'], style: const TextStyle(color: Colors.white, fontSize: 18)),
-                      subtitle: Text('${s['englishName']} • ${s['numberOfAyahs']} آية',
+                      title: Text(LanguageManager.currentLanguage.value == 'ar' ? s['name'] : s['englishName'], style: const TextStyle(color: Colors.white, fontSize: 18)),
+                      subtitle: Text(LanguageManager.currentLanguage.value == 'ar' ? '${s['englishName']} • ${s['numberOfAyahs']} ${LanguageManager.t('ayahs_count')}' : '${s['numberOfAyahs']} ${LanguageManager.t('ayahs_count')}',
                           style: const TextStyle(color: Colors.white54, fontSize: 13)),
                       trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xFFD4AF37), size: 16),
                     );
@@ -106,6 +109,6 @@ class _QuranScreenState extends State<QuranScreen> {
                 ),
         ),
       ],
-    );
+    ));
   }
 }

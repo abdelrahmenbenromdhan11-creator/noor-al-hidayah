@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../i18n/language_manager.dart';
 
 class QuranPlanScreen extends StatefulWidget {
   const QuranPlanScreen({super.key});
@@ -10,15 +11,14 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
   int? _selectedDays;
   int _completedDays = 0;
   bool _todayDone = false;
-
   final int totalPages = 604;
 
   final List<Map<String, dynamic>> _plans = [
-    {'days': 30, 'label': 'شهر واحد', 'icon': Icons.speed, 'color': Color(0xFFFF6B6B)},
-    {'days': 60, 'label': 'شهران', 'icon': Icons.trending_up, 'color': Color(0xFFFFA500)},
-    {'days': 90, 'label': '3 أشهر', 'icon': Icons.calendar_view_month, 'color': Color(0xFF4ECDC4)},
-    {'days': 180, 'label': '6 أشهر', 'icon': Icons.calendar_month, 'color': Color(0xFF95E1D3)},
-    {'days': 365, 'label': 'سنة', 'icon': Icons.event_note, 'color': Color(0xFFD4AF37)},
+    {'days': 30, 'icon': Icons.speed, 'color': const Color(0xFFFF6B6B), 'key': 'one_month'},
+    {'days': 60, 'icon': Icons.trending_up, 'color': const Color(0xFFFFA500), 'key': 'two_months'},
+    {'days': 90, 'icon': Icons.calendar_view_month, 'color': const Color(0xFF4ECDC4), 'key': 'three_months'},
+    {'days': 180, 'icon': Icons.calendar_month, 'color': const Color(0xFF95E1D3), 'key': 'six_months'},
+    {'days': 365, 'icon': Icons.event_note, 'color': const Color(0xFFD4AF37), 'key': 'one_year'},
   ];
 
   int get _pagesPerDay => _selectedDays == null ? 0 : (totalPages / _selectedDays!).ceil();
@@ -51,15 +51,19 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0B2B26),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF143B32),
-        title: const Text('خطة ختم القرآن', style: TextStyle(color: Color(0xFFD4AF37))),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Color(0xFFD4AF37)),
+    return ValueListenableBuilder<String>(
+      valueListenable: LanguageManager.currentLanguage,
+      builder: (context, lang, _) => Scaffold(
+        backgroundColor: const Color(0xFF0B2B26),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF143B32),
+          title: Text(LanguageManager.t('quran_plan_title'),
+              style: const TextStyle(color: Color(0xFFD4AF37))),
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Color(0xFFD4AF37)),
+        ),
+        body: _selectedDays == null ? _buildPlanSelection() : _buildActivePlan(),
       ),
-      body: _selectedDays == null ? _buildPlanSelection() : _buildActivePlan(),
     );
   }
 
@@ -78,13 +82,17 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFFD4AF37), width: 1),
           ),
-          child: const Column(
+          child: Column(
             children: [
-              Icon(Icons.menu_book, color: Color(0xFFD4AF37), size: 48),
-              SizedBox(height: 12),
-              Text('اختر خطتك لختم القرآن', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Text('سنحسب لك الورد اليومي تلقائيًا', style: TextStyle(color: Colors.white54, fontSize: 13)),
+              const Icon(Icons.menu_book, color: Color(0xFFD4AF37), size: 48),
+              const SizedBox(height: 12),
+              Text(LanguageManager.t('choose_your_plan'),
+                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
+              const SizedBox(height: 8),
+              Text(LanguageManager.t('plan_calc_note'),
+                  style: const TextStyle(color: Colors.white54, fontSize: 13),
+                  textAlign: TextAlign.center),
             ],
           ),
         ),
@@ -122,9 +130,11 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(p['label'], style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(LanguageManager.t(p['key'] as String),
+                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
-                  Text('$pagesPerDay صفحة يوميًا', style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 14)),
+                  Text('$pagesPerDay ${LanguageManager.t('pages_day')}',
+                      style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 14)),
                 ],
               ),
             ),
@@ -139,7 +149,6 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        // دائرة التقدم
         Center(
           child: SizedBox(
             width: 220, height: 220,
@@ -161,7 +170,7 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
                     Text('${(_progress * 100).toInt()}%',
                         style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 42, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
-                    Text('$_completedDays / $_selectedDays يوم',
+                    Text('$_completedDays / $_selectedDays',
                         style: const TextStyle(color: Colors.white70, fontSize: 14)),
                   ],
                 ),
@@ -170,8 +179,6 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
           ),
         ),
         const SizedBox(height: 30),
-
-        // بطاقة الورد اليومي
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -185,24 +192,25 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
           ),
           child: Column(
             children: [
-              const Text('ورد اليوم', style: TextStyle(color: Colors.white70, fontSize: 15)),
+              Text(LanguageManager.t('today_wird'),
+                  style: const TextStyle(color: Colors.white70, fontSize: 15)),
               const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _statColumn('صفحات', '$_pagesPerDay', Icons.description),
+                  _statColumn(LanguageManager.t('pages_unit'), '$_pagesPerDay', Icons.description),
                   Container(width: 1, height: 50, color: Colors.white24),
-                  _statColumn('أجزاء', '${(_pagesPerDay / 20).toStringAsFixed(1)}', Icons.book),
+                  _statColumn(LanguageManager.t('parts_unit'),
+                      (_pagesPerDay / 20).toStringAsFixed(1), Icons.book),
                   Container(width: 1, height: 50, color: Colors.white24),
-                  _statColumn('صفحة البداية', '${_completedDays * _pagesPerDay + 1}', Icons.play_arrow),
+                  _statColumn(LanguageManager.t('start_page'),
+                      '${_completedDays * _pagesPerDay + 1}', Icons.play_arrow),
                 ],
               ),
             ],
           ),
         ),
         const SizedBox(height: 20),
-
-        // زر إكمال الورد
         GestureDetector(
           onTap: _markToday,
           child: Container(
@@ -218,30 +226,32 @@ class _QuranPlanScreenState extends State<QuranPlanScreen> {
                 Icon(_todayDone ? Icons.check_circle : Icons.touch_app,
                     color: _todayDone ? const Color(0xFFD4AF37) : const Color(0xFF0B2B26), size: 26),
                 const SizedBox(width: 10),
-                Text(_todayDone ? 'أكملت ورد اليوم ✓' : 'أكملت وردي اليوم',
-                    style: TextStyle(
-                      color: _todayDone ? const Color(0xFFD4AF37) : const Color(0xFF0B2B26),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    )),
+                Text(
+                  _todayDone
+                      ? '${LanguageManager.t('mark_completed')} ✓'
+                      : LanguageManager.t('mark_completed'),
+                  style: TextStyle(
+                    color: _todayDone ? const Color(0xFFD4AF37) : const Color(0xFF0B2B26),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
         ),
         const SizedBox(height: 24),
-
-        // شبكة الأيام
-        const Text('تقدمك اليومي', style: TextStyle(color: Color(0xFFD4AF37), fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(LanguageManager.t('daily_progress'),
+            style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         _buildDaysGrid(),
         const SizedBox(height: 24),
-
-        // زر إعادة
         Center(
           child: TextButton.icon(
             onPressed: _resetPlan,
             icon: const Icon(Icons.refresh, color: Colors.white54),
-            label: const Text('اختيار خطة جديدة', style: TextStyle(color: Colors.white54)),
+            label: Text(LanguageManager.t('new_plan'),
+                style: const TextStyle(color: Colors.white54)),
           ),
         ),
       ],
