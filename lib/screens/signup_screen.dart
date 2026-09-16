@@ -42,7 +42,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0B2B26),
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: const Color(0xFF143B32),
           title: const Text('إنشاء حساب', style: TextStyle(color: Color(0xFFD4AF37))),

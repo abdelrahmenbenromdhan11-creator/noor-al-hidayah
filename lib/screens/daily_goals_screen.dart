@@ -91,7 +91,7 @@ class _DailyGoalsScreenState extends State<DailyGoalsScreen> {
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.currentLanguage,
       builder: (context, lang, _) => Scaffold(
-        backgroundColor: const Color(0xFF0B2B26),
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: const Color(0xFF143B32),
           title: Text(LanguageManager.t('daily_goals_title'),
@@ -133,7 +133,7 @@ class _DailyGoalsScreenState extends State<DailyGoalsScreen> {
                           child: CircularProgressIndicator(
                             value: _progress,
                             strokeWidth: 12,
-                            backgroundColor: const Color(0xFF0B2B26),
+                            backgroundColor: Colors.transparent,
                             valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFD4AF37)),
                           ),
                         ),

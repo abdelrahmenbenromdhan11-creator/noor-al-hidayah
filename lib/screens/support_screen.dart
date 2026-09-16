@@ -27,7 +27,7 @@ class SupportScreen extends StatelessWidget {
       builder: (context, lang, _) => Directionality(
         textDirection: LanguageManager.isRTL() ? TextDirection.rtl : TextDirection.ltr,
         child: Scaffold(
-          backgroundColor: const Color(0xFF0B2B26),
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: const Color(0xFF143B32),
             title: Text(LanguageManager.t('support_title'),

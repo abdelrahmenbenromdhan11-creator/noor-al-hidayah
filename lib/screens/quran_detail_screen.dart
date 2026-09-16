@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../i18n/language_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'reciters.dart';
+import '../i18n/language_manager.dart';
 
 class QuranDetailScreen extends StatefulWidget {
   final int surahNumber;
@@ -20,7 +21,8 @@ class QuranDetailScreen extends StatefulWidget {
   State<QuranDetailScreen> createState() => _QuranDetailScreenState();
 }
 
-class _QuranDetailScreenState extends State<QuranDetailScreen> {
+class _QuranDetailScreenState extends State<QuranDetailScreen>
+    with SingleTickerProviderStateMixin {
   List<dynamic> _ayahs = [];
   bool _loading = true;
   bool _showEnglish = true;
@@ -28,12 +30,17 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
   bool _playing = false;
   Reciter _reciter = allReciters.first;
   int _currentAyahIndex = -1;
+  late AnimationController _glowController;
 
   bool get _isFullSurah => fullSurahSources.containsKey(_reciter.id);
 
   @override
   void initState() {
     super.initState();
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
     _loadAyahs();
     _player.currentIndexStream.listen((index) {
       if (mounted && index != null && !_isFullSurah) {
@@ -84,13 +91,11 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
 
     try {
       if (_isFullSurah) {
-        // صوت السورة كاملة من mp3quran.net
         final baseUrl = fullSurahSources[_reciter.id]!;
         final surahPad = widget.surahNumber.toString().padLeft(3, '0');
         final url = '$baseUrl/$surahPad.mp3';
         await _player.setUrl(url);
       } else {
-        // آية بآية من islamic.network
         final playlist = ConcatenatingAudioSource(children: []);
         for (final ayah in _ayahs) {
           final num = ayah['globalAyahNumber'];
@@ -105,7 +110,12 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
       setState(() => _playing = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تعذر تشغيل ${_reciter.arabic} لهذه السورة'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('تعذر تشغيل ${_reciter.arabic}',
+                style: GoogleFonts.cairo(fontWeight: FontWeight.bold)),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }
@@ -116,7 +126,7 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
       context: context,
       backgroundColor: const Color(0xFF143B32),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
@@ -125,9 +135,22 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
           height: 500,
           child: Column(
             children: [
-              Container(width: 50, height: 5, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(10))),
+              Container(
+                width: 50, height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               const SizedBox(height: 16),
-              Text(LanguageManager.t('choose_reciter'), style: TextStyle(color: Color(0xFFD4AF37), fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(
+                LanguageManager.t('choose_reciter'),
+                style: GoogleFonts.cairo(
+                  color: const Color(0xFFD4AF37),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
@@ -135,23 +158,64 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
                   itemBuilder: (_, i) {
                     final r = allReciters[i];
                     final isSelected = r.id == _reciter.id;
-                    return ListTile(
-                      onTap: () {
-                        setState(() {
-                          _reciter = r;
-                          _playing = false;
-                          _currentAyahIndex = -1;
-                        });
-                        _player.stop();
-                        Navigator.pop(ctx);
-                      },
-                      leading: CircleAvatar(
-                        backgroundColor: isSelected ? const Color(0xFFD4AF37) : const Color(0xFF0B2B26),
-                        child: Text('${i + 1}', style: TextStyle(color: isSelected ? const Color(0xFF0B2B26) : const Color(0xFFD4AF37), fontWeight: FontWeight.bold)),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFF1E4D40) : const Color(0xFF0B2B26),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isSelected ? const Color(0xFFD4AF37) : const Color(0xFFD4AF37).withOpacity(0.2),
+                          width: isSelected ? 2 : 1,
+                        ),
                       ),
-                      title: Text(r.arabic, style: TextStyle(color: isSelected ? const Color(0xFFD4AF37) : Colors.white, fontWeight: FontWeight.bold)),
-                      subtitle: Text('${r.name} • ${r.country}', style: const TextStyle(color: Colors.white54, fontSize: 12)),
-                      trailing: isSelected ? const Icon(Icons.check_circle, color: Color(0xFFD4AF37)) : null,
+                      child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            _reciter = r;
+                            _playing = false;
+                            _currentAyahIndex = -1;
+                          });
+                          _player.stop();
+                          Navigator.pop(ctx);
+                        },
+                        leading: Container(
+                          width: 42, height: 42,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: isSelected
+                                ? const LinearGradient(colors: [Color(0xFFD4AF37), Color(0xFFB8860B)])
+                                : null,
+                            color: isSelected ? null : const Color(0xFF143B32),
+                            border: Border.all(
+                              color: isSelected ? const Color(0xFFD4AF37) : const Color(0xFFD4AF37).withOpacity(0.4),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${i + 1}',
+                              style: GoogleFonts.cairo(
+                                color: isSelected ? const Color(0xFF0B2B26) : const Color(0xFFD4AF37),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          r.arabic,
+                          style: GoogleFonts.cairo(
+                            color: isSelected ? const Color(0xFFD4AF37) : Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          '${r.name} • ${r.country}',
+                          style: GoogleFonts.cairo(color: Colors.white54, fontSize: 11),
+                        ),
+                        trailing: isSelected
+                            ? const Icon(Icons.check_circle, color: Color(0xFFD4AF37))
+                            : null,
+                      ),
                     );
                   },
                 ),
@@ -165,167 +229,327 @@ class _QuranDetailScreenState extends State<QuranDetailScreen> {
 
   @override
   void dispose() {
+    _glowController.dispose();
     _player.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0B2B26),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF143B32),
-        title: Text(widget.surahName, style: const TextStyle(color: Color(0xFFD4AF37))),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Color(0xFFD4AF37)),
-        actions: [
-          IconButton(
-            icon: Icon(_showEnglish ? Icons.translate : Icons.translate_outlined),
-            onPressed: () => setState(() => _showEnglish = !_showEnglish),
-          ),
-        ],
-      ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFFD4AF37)))
-          : Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF143B32),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.3)),
-                  ),
-                  child: Column(
+    return ValueListenableBuilder<String>(
+      valueListenable: LanguageManager.currentLanguage,
+      builder: (context, lang, _) {
+        final isAr = lang == 'ar';
+        return Directionality(
+          textDirection: LanguageManager.isRTL() ? TextDirection.rtl : TextDirection.ltr,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: const Color(0xFF143B32),
+              title: Text(
+                widget.surahName,
+                style: GoogleFonts.amiri(color: const Color(0xFFD4AF37), fontSize: 22),
+              ),
+              centerTitle: true,
+              iconTheme: const IconThemeData(color: Color(0xFFD4AF37)),
+              actions: [
+                IconButton(
+                  icon: Icon(_showEnglish ? Icons.translate : Icons.translate_outlined),
+                  color: const Color(0xFFD4AF37),
+                  onPressed: () => setState(() => _showEnglish = !_showEnglish),
+                ),
+              ],
+            ),
+            body: _loading
+                ? const Center(child: CircularProgressIndicator(color: Color(0xFFD4AF37)))
+                : Column(
                     children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: _playSurah,
-                            icon: Icon(_playing ? Icons.pause_circle : Icons.play_circle,
-                                color: const Color(0xFFD4AF37), size: 48),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(widget.surahEnglish, style: const TextStyle(color: Colors.white, fontSize: 16)),
-                                const SizedBox(height: 4),
-                                Text('${LanguageManager.t('reciter_label')}: ${_reciter.arabic}', style: const TextStyle(color: Color(0xFFD4AF37), fontSize: 13)),
-                                if (_isFullSurah)
-                                  Text(LanguageManager.t('full_surah_audio'), style: TextStyle(color: Colors.white54, fontSize: 11)),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: _pickReciter,
-                          borderRadius: BorderRadius.circular(12),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0B2B26),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.5)),
-                            ),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.mic, color: Color(0xFFD4AF37), size: 20),
-                                SizedBox(width: 8),
-                                Text('تغيير القارئ (13 متوفر)', style: TextStyle(color: Color(0xFFD4AF37), fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          ),
+                      _buildPlayerCard(isAr),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          itemCount: _ayahs.length,
+                          itemBuilder: (context, i) => _buildAyahCard(_ayahs[i], i, isAr),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      const Divider(color: Colors.white24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(LanguageManager.t('english_translation_label'), style: TextStyle(color: Colors.white70, fontSize: 13)),
-                          Switch(
-                            value: _showEnglish,
-                            activeColor: const Color(0xFFD4AF37),
-                            onChanged: (v) => setState(() => _showEnglish = v),
+                    ],
+                  ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ═══════════ بطاقة المشغل ═══════════
+  Widget _buildPlayerCard(bool isAr) {
+    return AnimatedBuilder(
+      animation: _glowController,
+      builder: (context, child) {
+        final glow = _glowController.value;
+        return Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.lerp(const Color(0xFF1E4D40), const Color(0xFF2B6E5C), glow * 0.5)!,
+                const Color(0xFF0B2B26),
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: Color.lerp(const Color(0xFFD4AF37), const Color(0xFFFFE9A8), glow)!,
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFD4AF37).withOpacity(0.15 + 0.2 * glow),
+                blurRadius: 15 + 10 * glow,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  // زر التشغيل
+                  GestureDetector(
+                    onTap: _playSurah,
+                    child: Container(
+                      width: 60, height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.lerp(const Color(0xFFD4AF37), const Color(0xFFFFE9A8), glow)!,
+                            const Color(0xFF8B6914),
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFD4AF37).withOpacity(0.5 * glow),
+                            blurRadius: 15,
+                            spreadRadius: 2,
                           ),
                         ],
+                      ),
+                      child: Icon(
+                        _playing ? Icons.pause : Icons.play_arrow,
+                        color: const Color(0xFF0B2B26),
+                        size: 34,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.surahEnglish,
+                          style: GoogleFonts.cairo(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${LanguageManager.t('reciter_label')}: ${_reciter.arabic}',
+                          style: GoogleFonts.cairo(
+                            color: const Color(0xFFD4AF37),
+                            fontSize: 12,
+                          ),
+                        ),
+                        if (_isFullSurah)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              LanguageManager.t('full_surah_audio'),
+                              style: GoogleFonts.cairo(
+                                color: Colors.white54,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              // زر تغيير القارئ
+              GestureDetector(
+                onTap: _pickReciter,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0B2B26).withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.4)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.mic, color: Color(0xFFD4AF37), size: 18),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${LanguageManager.t('change_reciter')} (13)',
+                        style: GoogleFonts.cairo(
+                          color: const Color(0xFFD4AF37),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: _ayahs.length,
-                    itemBuilder: (context, i) {
-                      final a = _ayahs[i];
-                      final isCurrent = i == _currentAyahIndex;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: isCurrent ? const Color(0xFF1E4D40) : const Color(0xFF143B32),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: isCurrent ? const Color(0xFFD4AF37) : const Color(0xFFD4AF37).withOpacity(0.1),
-                            width: isCurrent ? 2 : 1,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(a['arabic'],
-                                style: TextStyle(
-                                  color: isCurrent ? const Color(0xFFD4AF37) : Colors.white,
-                                  fontSize: 22,
-                                  height: 1.8,
-                                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                                ),
-                                textAlign: TextAlign.right),
-                            const SizedBox(height: 10),
-                            if (_showEnglish) ...[
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: const Color(0xFF0B2B26), borderRadius: BorderRadius.circular(8)),
-                                child: Text(a['english'],
-                                    style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, fontStyle: FontStyle.italic),
-                                    textAlign: TextAlign.left),
-                              ),
-                              const SizedBox(height: 8),
-                            ],
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: isCurrent ? const Color(0xFFD4AF37) : const Color(0xFFD4AF37).withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text('${a['number']}',
-                                    style: TextStyle(
-                                      color: isCurrent ? const Color(0xFF0B2B26) : const Color(0xFFD4AF37),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ═══════════ بطاقة الآية ═══════════
+  Widget _buildAyahCard(Map<String, dynamic> a, int i, bool isAr) {
+    final isCurrent = i == _currentAyahIndex;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.only(bottom: 14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isCurrent
+              ? [const Color(0xFF1E4D40), const Color(0xFF2B6E5C)]
+              : [const Color(0xFF143B32), const Color(0xFF0B2B26)],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: isCurrent
+              ? const Color(0xFFD4AF37)
+              : const Color(0xFFD4AF37).withOpacity(0.2),
+          width: isCurrent ? 2 : 1,
+        ),
+        boxShadow: isCurrent
+            ? [
+                BoxShadow(
+                  color: const Color(0xFFD4AF37).withOpacity(0.4),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                ),
+              ]
+            : null,
+      ),
+      child: Stack(
+        children: [
+          // الزخرفة العلوية اليمنى
+          Positioned(top: 6, right: 6, child: _corner(size: 16)),
+          Positioned(bottom: 6, left: 6, child: Transform.rotate(angle: 3.1416, child: _corner(size: 16))),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // النص العربي
+                Text(
+                  a['arabic'],
+                  style: GoogleFonts.amiri(
+                    color: isCurrent ? const Color(0xFFD4AF37) : Colors.white,
+                    fontSize: 22,
+                    height: 2,
+                    fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 10),
+                // الترجمة الإنجليزية
+                if (_showEnglish) ...[
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0B2B26).withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.15)),
+                    ),
+                    child: Text(
+                      a['english'],
+                      style: GoogleFonts.cairo(
+                        color: Colors.white70,
+                        fontSize: 14,
+                        height: 1.5,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+                // رقم الآية
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      gradient: isCurrent
+                          ? const LinearGradient(colors: [Color(0xFFD4AF37), Color(0xFFB8860B)])
+                          : null,
+                      color: isCurrent ? null : const Color(0xFFD4AF37).withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: const Color(0xFFD4AF37).withOpacity(0.5)),
+                    ),
+                    child: Text(
+                      '${a['number']}',
+                      style: GoogleFonts.cairo(
+                        color: isCurrent ? const Color(0xFF0B2B26) : const Color(0xFFD4AF37),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
+          ),
+        ],
+      ),
     );
   }
+
+  Widget _corner({double size = 22}) {
+    return SizedBox(
+      width: size, height: size,
+      child: CustomPaint(painter: _AyahCornerPainter()),
+    );
+  }
+}
+
+class _AyahCornerPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFFD4AF37).withOpacity(0.6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+
+    final path = Path();
+    path.moveTo(0, size.height);
+    path.lineTo(0, size.height * 0.4);
+    path.quadraticBezierTo(size.width * 0.1, size.height * 0.1, size.width * 0.4, 0);
+    path.lineTo(size.width, 0);
+    canvas.drawPath(path, paint);
+
+    final dotPaint = Paint()
+      ..color = const Color(0xFFD4AF37)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(size.width * 0.15, size.height * 0.15), 1.5, dotPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

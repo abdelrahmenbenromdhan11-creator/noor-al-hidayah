@@ -25,7 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.currentLanguage,
       builder: (context, lang, _) => Scaffold(
-        backgroundColor: const Color(0xFF0B2B26),
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: const Color(0xFF143B32),
           title: Text(LanguageManager.t('settings'),

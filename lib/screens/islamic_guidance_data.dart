@@ -1,0 +1,725 @@
+class GuidanceItem {
+  final String titleAr;
+  final String titleEn;
+  final String descAr;
+  final String descEn;
+  final String? ref;
+  const GuidanceItem({
+    required this.titleAr,
+    required this.titleEn,
+    required this.descAr,
+    required this.descEn,
+    this.ref,
+  });
+}
+
+// ═══════════════ الأحاديث النبوية ═══════════════
+const List<GuidanceItem> hadithsList = [
+  GuidanceItem(
+    titleAr: 'أحب الأعمال إلى الله',
+    titleEn: 'Most Beloved Deeds',
+    descAr: 'قال ﷺ: "أحبُّ الأعمالِ إلى اللهِ أدْومُها وإنْ قلَّ"',
+    descEn: '"The most beloved deeds to Allah are the most consistent, even if small."',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'من قال سبحان الله وبحمده',
+    titleEn: 'Glory be to Allah',
+    descAr: 'قال ﷺ: "من قال سبحان الله وبحمده في يوم مائة مرة حُطَّت خطاياه وإن كانت مثل زبد البحر"',
+    descEn: '"Whoever says Subhan Allah wa bihamdih 100 times a day, his sins are erased."',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'الكلمة الطيبة',
+    titleEn: 'Kind Word',
+    descAr: 'قال ﷺ: "الكلمةُ الطيبةُ صدقةٌ"',
+    descEn: '"A kind word is a charity."',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'من دلَّ على خير',
+    titleEn: 'Whoever Guides to Good',
+    descAr: 'قال ﷺ: "من دلَّ على خيرٍ فله مثلُ أجرِ فاعلِه"',
+    descEn: '"Whoever guides to good has a reward like the one who does it."',
+    ref: 'مسلم',
+  ),
+  GuidanceItem(
+    titleAr: 'خير الناس',
+    titleEn: 'Best of People',
+    descAr: 'قال ﷺ: "خيرُ الناسِ أنفعُهم للناسِ"',
+    descEn: '"The best of people are those most beneficial to others."',
+    ref: 'حسن',
+  ),
+  GuidanceItem(
+    titleAr: 'تبسمك في وجه أخيك',
+    titleEn: 'Your Smile',
+    descAr: 'قال ﷺ: "تبسُّمُك في وجهِ أخيك صدقةٌ"',
+    descEn: '"Your smile for your brother is charity."',
+    ref: 'الترمذي',
+  ),
+  GuidanceItem(
+    titleAr: 'اتق الله حيثما كنت',
+    titleEn: 'Fear Allah Everywhere',
+    descAr: 'قال ﷺ: "اتَّقِ اللهَ حيثما كنتَ، وأتبِعِ السيئةَ الحسنةَ تمحُها، وخالِقِ الناسَ بخُلقٍ حسنٍ"',
+    descEn: '"Fear Allah wherever you are, follow a bad deed with a good one, and treat people with good manners."',
+    ref: 'الترمذي',
+  ),
+  GuidanceItem(
+    titleAr: 'الطهور شطر الإيمان',
+    titleEn: 'Purity is Half of Faith',
+    descAr: 'قال ﷺ: "الطُّهورُ شطرُ الإيمانِ"',
+    descEn: '"Purity is half of faith."',
+    ref: 'مسلم',
+  ),
+];
+
+// ═══════════════ المحرمات (منقحة - 30 عنصرًا) ═══════════════
+const List<GuidanceItem> haramList = [
+  // ───── العقيدة ─────
+  GuidanceItem(
+    titleAr: 'الشرك بالله',
+    titleEn: 'Shirk (Polytheism)',
+    descAr: 'صرف شيء من العبادة لغير الله. ﴿إِنَّ الشِّرْكَ لَظُلْمٌ عَظِيمٌ﴾ [لقمان: 13]',
+    descEn: 'Directing any act of worship to other than Allah. "Indeed, shirk is great injustice." [Luqman: 13]',
+    ref: 'من أعظم الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'السحر والشعوذة',
+    titleEn: 'Magic & Sorcery',
+    descAr: 'تعاطي السحر أو ممارسته، وهو من السبع الموبقات. ﴿وَلَٰكِنَّ الشَّيَاطِينَ كَفَرُوا يُعَلِّمُونَ النَّاسَ السِّحْرَ﴾ [البقرة: 102]',
+    descEn: 'Practicing or using magic — among the seven destructive sins. [Al-Baqarah: 102]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'الانتحار',
+    titleEn: 'Suicide',
+    descAr: 'تعمد الإنسان قتل نفسه. ﴿وَلَا تَقْتُلُوا أَنْفُسَكُمْ إِنَّ اللَّهَ كَانَ بِكُمْ رَحِيمًا﴾ [النساء: 29]',
+    descEn: 'Intentionally taking one\'s own life. [An-Nisa: 29]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الدماء ─────
+  GuidanceItem(
+    titleAr: 'قتل النفس بغير حق',
+    titleEn: 'Murder',
+    descAr: 'قتل إنسان بغير حق شرعي. ﴿وَلَا تَقْتُلُوا النَّفْسَ الَّتِي حَرَّمَ اللَّهُ إِلَّا بِالْحَقِّ﴾ [الإسراء: 33]',
+    descEn: 'Killing a soul without legal right. [Al-Isra: 33]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الأموال ─────
+  GuidanceItem(
+    titleAr: 'أكل الربا',
+    titleEn: 'Riba (Usury)',
+    descAr: 'التعامل بالربا. ﴿وَأَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا﴾ [البقرة: 275]',
+    descEn: 'Dealing with interest/usury. "Allah has permitted trade and forbidden Riba." [Al-Baqarah: 275]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'السرقة',
+    titleEn: 'Theft',
+    descAr: 'أخذ مال الغير خفية بغير حق. ﴿وَالسَّارِقُ وَالسَّارِقَةُ فَاقْطَعُوا أَيْدِيَهُمَا﴾ [المائدة: 38]',
+    descEn: 'Taking others\' property secretly. [Al-Ma\'idah: 38]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'أكل مال اليتيم',
+    titleEn: 'Consuming Orphan\'s Wealth',
+    descAr: '﴿إِنَّ الَّذِينَ يَأْكُلُونَ أَمْوَالَ الْيَتَامَىٰ ظُلْمًا إِنَّمَا يَأْكُلُونَ فِي بُطُونِهِمْ نَارًا﴾ [النساء: 10]',
+    descEn: 'Consuming orphan\'s wealth unjustly. [An-Nisa: 10]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'القمار والميسر',
+    titleEn: 'Gambling',
+    descAr: '﴿إِنَّمَا الْخَمْرُ وَالْمَيْسِرُ ... رِجْسٌ مِنْ عَمَلِ الشَّيْطَانِ فَاجْتَنِبُوهُ﴾ [المائدة: 90]',
+    descEn: 'Gambling and games of chance. [Al-Ma\'idah: 90]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'الرشوة',
+    titleEn: 'Bribery',
+    descAr: 'دفع المال للحصول على حق بغير وجهه. قال ﷺ: "لعن الله الراشي والمرتشي" [الترمذي]',
+    descEn: 'Paying money to obtain unlawful gain. "Allah cursed the one who gives and takes a bribe." [At-Tirmidhi]',
+    ref: 'ملعون فاعله',
+  ),
+  GuidanceItem(
+    titleAr: 'الغش',
+    titleEn: 'Deception',
+    descAr: 'خداع الناس في البيع أو الشراء. قال ﷺ: "من غَشَّنا فليس منا" [مسلم]',
+    descEn: 'Deceiving people in trade. "Whoever deceives us is not one of us." [Muslim]',
+    ref: 'صحيح مسلم',
+  ),
+  GuidanceItem(
+    titleAr: 'أكل أموال الناس بالباطل',
+    titleEn: 'Consuming Wealth Unlawfully',
+    descAr: '﴿وَلَا تَأْكُلُوا أَمْوَالَكُمْ بَيْنَكُمْ بِالْبَاطِلِ﴾ [البقرة: 188]',
+    descEn: '"And do not consume one another\'s wealth unjustly." [Al-Baqarah: 188]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الطعام والشراب ─────
+  GuidanceItem(
+    titleAr: 'الخمر والمسكرات',
+    titleEn: 'Alcohol & Intoxicants',
+    descAr: 'كل ما أسكر وأذهب العقل. قال ﷺ: "كل مسكرٍ حرامٌ" [مسلم]',
+    descEn: 'Every intoxicant is forbidden. [Muslim]',
+    ref: 'أم الخبائث',
+  ),
+  GuidanceItem(
+    titleAr: 'لحم الخنزير',
+    titleEn: 'Pork',
+    descAr: '﴿إِنَّمَا حَرَّمَ عَلَيْكُمُ الْمَيْتَةَ وَالدَّمَ وَلَحْمَ الْخِنزِيرِ﴾ [البقرة: 173]',
+    descEn: '"He has only forbidden you dead animals, blood, and swine flesh." [Al-Baqarah: 173]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'الميتة',
+    titleEn: 'Dead Meat',
+    descAr: 'الحيوان الذي مات بغير تذكية شرعية. ﴿حُرِّمَتْ عَلَيْكُمُ الْمَيْتَةُ﴾ [المائدة: 3]',
+    descEn: 'Animals that die without Islamic slaughter. [Al-Ma\'idah: 3]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'ما ذُبح لغير الله',
+    titleEn: 'Sacrificed for Other Than Allah',
+    descAr: '﴿وَمَا أُهِلَّ بِهِ لِغَيْرِ اللَّهِ﴾ [البقرة: 173]',
+    descEn: 'Animals slaughtered in the name of other than Allah. [Al-Baqarah: 173]',
+    ref: 'شرك أكبر',
+  ),
+  // ───── العلاقات والأعراض ─────
+  GuidanceItem(
+    titleAr: 'الزنا',
+    titleEn: 'Adultery',
+    descAr: '﴿وَلَا تَقْرَبُوا الزِّنَا إِنَّهُ كَانَ فَاحِشَةً وَسَاءَ سَبِيلًا﴾ [الإسراء: 32]',
+    descEn: '"And do not approach unlawful sexual intercourse." [Al-Isra: 32]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'قذف المحصنات',
+    titleEn: 'Accusing Chaste Women',
+    descAr: 'اتهام العفيفات بالزنا دون بينة. ﴿فَاجْلِدُوهُمْ ثَمَانِينَ جَلْدَةً﴾ [النور: 4]',
+    descEn: 'Falsely accusing chaste women. [An-Nur: 4]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'البهتان',
+    titleEn: 'False Accusation (Buhtan)',
+    descAr: 'اتهام الإنسان بما ليس فيه. ﴿وَتَقُولُونَ بِأَفْوَاهِكُم مَّا لَيْسَ لَكُم بِهِ عِلْمٌ﴾ [النور: 15]',
+    descEn: 'Accusing someone falsely of what they did not do. [An-Nur: 15]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الأسرة ─────
+  GuidanceItem(
+    titleAr: 'عقوق الوالدين',
+    titleEn: 'Disobeying Parents',
+    descAr: 'الإساءة إلى الوالدين أو التقصير في حقهما. ﴿وَبِالْوَالِدَيْنِ إِحْسَانًا﴾ [الإسراء: 23]',
+    descEn: 'Harming or neglecting one\'s parents. [Al-Isra: 23]',
+    ref: 'من أكبر الكبائر',
+  ),
+  GuidanceItem(
+    titleAr: 'قطيعة الرحم',
+    titleEn: 'Severing Family Ties',
+    descAr: 'هجر الأقارب بغير حق. ﴿وَتُقَطِّعُوا أَرْحَامَكُمْ﴾ [محمد: 22]',
+    descEn: 'Cutting off kinship ties. [Muhammad: 22]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'نكاح المحارم',
+    titleEn: 'Incestuous Marriage',
+    descAr: 'الزواج بمن حرم الله من المحارم. ﴿حُرِّمَتْ عَلَيْكُمْ أُمَّهَاتُكُمْ وَبَنَاتُكُمْ﴾ [النساء: 23]',
+    descEn: 'Marrying close blood relatives. [An-Nisa: 23]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'الجمع بين المرأة وأختها',
+    titleEn: 'Marrying Two Sisters',
+    descAr: '﴿وَأَن تَجْمَعُوا بَيْنَ الْأُخْتَيْنِ﴾ [النساء: 23]',
+    descEn: 'Being married to two sisters simultaneously. [An-Nisa: 23]',
+    ref: 'محرم بنص القرآن',
+  ),
+  // ───── اللسان ─────
+  GuidanceItem(
+    titleAr: 'الغيبة',
+    titleEn: 'Backbiting',
+    descAr: 'ذكر المسلم بما يكره. ﴿وَلَا يَغْتَب بَّعْضُكُم بَعْضًا﴾ [الحجرات: 12]',
+    descEn: 'Mentioning a Muslim in a way they dislike. [Al-Hujurat: 12]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'النميمة',
+    titleEn: 'Gossip (Namimah)',
+    descAr: 'نقل الكلام للإفساد بين الناس. قال ﷺ: "لا يدخل الجنة قتات" [متفق عليه]',
+    descEn: 'Spreading talk to cause discord. "The gossiper will not enter Paradise." [Agreed upon]',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'الكذب',
+    titleEn: 'Lying',
+    descAr: 'قال ﷺ: "وإياكم والكذب، فإن الكذب يهدي إلى الفجور" [متفق عليه]',
+    descEn: '"Beware of lying, for lying leads to immorality." [Agreed upon]',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'شهادة الزور وقول الزور',
+    titleEn: 'False Testimony',
+    descAr: '﴿وَاجْتَنِبُوا قَوْلَ الزُّورِ﴾ [الحج: 30]. قال ﷺ: "ألا وقول الزور" [متفق عليه]',
+    descEn: '"And avoid false statement." [Al-Hajj: 30]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'التجسس',
+    titleEn: 'Spying',
+    descAr: 'تتبع عورات الناس. ﴿وَلَا تَجَسَّسُوا﴾ [الحجرات: 12]',
+    descEn: 'Spying on people\'s private affairs. [Al-Hujurat: 12]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'السخرية من الناس',
+    titleEn: 'Mocking People',
+    descAr: '﴿لَا يَسْخَرْ قَوْمٌ مِّن قَوْمٍ عَسَىٰ أَن يَكُونُوا خَيْرًا مِّنْهُمْ﴾ [الحجرات: 11]',
+    descEn: '"Let not a people ridicule another people; perhaps they may be better than them." [Al-Hujurat: 11]',
+    ref: 'محرم بنص القرآن',
+  ),
+  // ───── الأخلاق ─────
+  GuidanceItem(
+    titleAr: 'الظلم',
+    titleEn: 'Injustice',
+    descAr: 'قال ﷺ: "إني حرمت الظلم على نفسي وجعلته بينكم محرما فلا تظالموا" [مسلم]',
+    descEn: '"I have forbidden injustice for Myself and made it forbidden among you." [Muslim]',
+    ref: 'صحيح مسلم',
+  ),
+  GuidanceItem(
+    titleAr: 'الخيانة',
+    titleEn: 'Betrayal',
+    descAr: '﴿لَا تَخُونُوا اللَّهَ وَالرَّسُولَ وَتَخُونُوا أَمَانَاتِكُمْ﴾ [الأنفال: 27]',
+    descEn: 'Betraying trusts and covenants. [Al-Anfal: 27]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'أذية الجار',
+    titleEn: 'Harming the Neighbor',
+    descAr: 'قال ﷺ: "والله لا يؤمن ... الذي لا يأمن جاره بوائقه" [متفق عليه]',
+    descEn: '"By Allah he does not believe — the one whose neighbor is not safe from his harm." [Agreed upon]',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'لبس الذهب والحرير للرجال',
+    titleEn: 'Gold & Silk for Men',
+    descAr: 'قال ﷺ: "حرم لباس الحرير والذهب على ذكور أمتي" [الترمذي]',
+    descEn: '"Silk and gold are forbidden for the males of my Ummah." [At-Tirmidhi]',
+    ref: 'صحيح',
+  ),
+  GuidanceItem(
+    titleAr: 'الصيام يومي العيدين',
+    titleEn: 'Fasting on the Two Eids',
+    descAr: 'قال ﷺ: "نهى عن صوم يومين: يوم الفطر ويوم الأضحى" [متفق عليه]',
+    descEn: '"He forbade fasting on two days: Eid al-Fitr and Eid al-Adha." [Agreed upon]',
+    ref: 'متفق عليه',
+  ),
+];
+
+// ═══════════════ المكروهات (20 عنصرًا منقحًا) ═══════════════
+const List<GuidanceItem> makruhList = [
+  // ───── الصلاة ─────
+  GuidanceItem(
+    titleAr: 'الالتفات في الصلاة بلا حاجة',
+    titleEn: 'Looking Around During Prayer',
+    descAr: 'التفات المصلي بوجهه أو بصره عن القبلة بلا حاجة. قال ﷺ: "هو اختلاس يختلسه الشيطان من صلاة أحدكم" [البخاري]',
+    descEn: '"It is a snatching that Shaytan snatches from your prayer." [Bukhari]',
+    ref: 'مكروه تحريمًا',
+  ),
+  GuidanceItem(
+    titleAr: 'رفع البصر إلى السماء في الصلاة',
+    titleEn: 'Looking Up During Prayer',
+    descAr: 'قال ﷺ: "لينتهينّ أقوام عن رفعهم أبصارهم إلى السماء في الصلاة، أو لتخطفنّ أبصارهم" [متفق عليه]',
+    descEn: '"Let people stop raising their eyes to the sky in prayer, or their eyesight will be snatched away." [Agreed upon]',
+    ref: 'منهي عنه',
+  ),
+  GuidanceItem(
+    titleAr: 'الصلاة مع مدافعة الأخبثين',
+    titleEn: 'Praying While Holding Urine/Stool',
+    descAr: 'قال ﷺ: "لا صلاة بحضرة الطعام، ولا وهو يدافعه الأخبثان" [مسلم]',
+    descEn: '"No prayer when food is present, nor while resisting the call of nature." [Muslim]',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'الصلاة بحضرة طعام يشتهيه',
+    titleEn: 'Praying While Food is Ready',
+    descAr: 'قال ﷺ: "لا صلاة بحضرة الطعام" [مسلم] — لأنه يشوّش على القلب',
+    descEn: '"No prayer when food is present." [Muslim]',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'الصلاة مع شدة النعاس',
+    titleEn: 'Praying While Very Sleepy',
+    descAr: 'قال ﷺ: "إذا نعس أحدكم وهو يصلي فليرقد حتى يذهب عنه النوم" [متفق عليه]',
+    descEn: '"If one of you becomes sleepy while praying, let him sleep until drowsiness leaves him." [Agreed upon]',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'العبث والحركة بلا حاجة في الصلاة',
+    titleEn: 'Fidgeting During Prayer',
+    descAr: 'الانشغال بحركات زائدة تنافي الخشوع.',
+    descEn: 'Excessive unnecessary movements that contradict humility in prayer.',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'الإسراع بالجري إلى الصلاة',
+    titleEn: 'Rushing to Prayer',
+    descAr: 'قال ﷺ: "إذا أقيمت الصلاة فلا تأتوها تسعون، وأتوها تمشون، وعليكم السكينة" [متفق عليه]',
+    descEn: '"When prayer is established, do not come rushing; come walking with tranquility." [Agreed upon]',
+    ref: 'مكروه',
+  ),
+  // ───── الصيام ─────
+  GuidanceItem(
+    titleAr: 'إفراد يوم الجمعة بالصيام',
+    titleEn: 'Fasting Only on Friday',
+    descAr: 'قال ﷺ: "لا يصم أحدكم يوم الجمعة إلا أن يصوم يومًا قبله أو يومًا بعده" [متفق عليه]',
+    descEn: '"Do not fast on Friday unless you fast a day before or after it." [Agreed upon]',
+    ref: 'مكروه تحريمًا',
+  ),
+  // ───── الطعام والشراب ─────
+  GuidanceItem(
+    titleAr: 'النفخ في الطعام والشراب',
+    titleEn: 'Blowing on Food/Drink',
+    descAr: 'من آداب الطعام ترك النفخ فيه. (ورد في الباب خلاف في ثبوت بعض الأحاديث)',
+    descEn: 'From the etiquettes of eating: avoid blowing on food/drink. (Some narrations have been disputed)',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'التنفس في الإناء أثناء الشرب',
+    titleEn: 'Breathing into the Drink',
+    descAr: 'قال ﷺ: "إذا شرب أحدكم فلا يتنفس في الإناء" [متفق عليه]',
+    descEn: '"When one of you drinks, let him not breathe into the vessel." [Agreed upon]',
+    ref: 'منهي عنه',
+  ),
+  GuidanceItem(
+    titleAr: 'الأكل والشرب بالشمال بلا عذر',
+    titleEn: 'Eating/Drinking with Left Hand',
+    descAr: 'قال ﷺ: "إذا أكل أحدكم فليأكل بيمينه، وإذا شرب فليشرب بيمينه؛ فإن الشيطان يأكل بشماله ويشرب بشماله" [مسلم]',
+    descEn: '"Eat and drink with your right hand, for Shaytan eats and drinks with his left." [Muslim]',
+    ref: 'منهي عنه',
+  ),
+  GuidanceItem(
+    titleAr: 'الإكثار من الأكل والشرب',
+    titleEn: 'Overeating',
+    descAr: 'قال ﷺ: "ما ملأ آدميٌّ وعاءً شرًّا من بطن... ثلث لطعامه، وثلث لشرابه، وثلث لنفسه" [الترمذي]',
+    descEn: '"No human fills a vessel worse than his stomach... a third for food, a third for drink, a third for breath." [At-Tirmidhi]',
+    ref: 'مكروه',
+  ),
+  // ───── قضاء الحاجة ─────
+  GuidanceItem(
+    titleAr: 'الكلام أثناء قضاء الحاجة بلا حاجة',
+    titleEn: 'Talking in the Bathroom',
+    descAr: 'من آداب قضاء الحاجة ترك الكلام والاشتغال بما يناسب الموضع.',
+    descEn: 'From the etiquettes: avoid talking while relieving oneself.',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'البول في الماء الراكد',
+    titleEn: 'Urinating in Still Water',
+    descAr: 'قال ﷺ: "لا يبولنّ أحدكم في الماء الدائم الذي لا يجري ثم يغتسل فيه" [متفق عليه]',
+    descEn: '"Let none of you urinate in still water then bathe in it." [Agreed upon]',
+    ref: 'منهي عنه',
+  ),
+  // ───── المسجد ─────
+  GuidanceItem(
+    titleAr: 'دخول المسجد بعد أكل الثوم أو البصل',
+    titleEn: 'Entering Mosque After Garlic/Onion',
+    descAr: 'قال ﷺ: "من أكل من هذه الشجرة — يعني الثوم — فلا يؤذينّنا في مسجدنا" [متفق عليه]',
+    descEn: '"Whoever eats from this tree (garlic), let him not harm us in our mosque." [Agreed upon]',
+    ref: 'منهي عنه',
+  ),
+  GuidanceItem(
+    titleAr: 'رفع الصوت في المسجد بما يؤذي المصلين',
+    titleEn: 'Raising Voice in Mosque',
+    descAr: 'احترامًا للمسجد وعدم التشويش على العبادة.',
+    descEn: 'Out of respect for the mosque and not disturbing others.',
+    ref: 'منهي عنه',
+  ),
+  // ───── اللسان ─────
+  GuidanceItem(
+    titleAr: 'كثرة الكلام الذي لا فائدة فيه',
+    titleEn: 'Excessive Idle Talk',
+    descAr: 'قال ﷺ: "من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت" [متفق عليه]',
+    descEn: '"Whoever believes in Allah and the Last Day, let him say good or remain silent." [Agreed upon]',
+    ref: 'مكروه',
+  ),
+  GuidanceItem(
+    titleAr: 'كثرة السؤال عمّا لا حاجة إليه',
+    titleEn: 'Excessive Questioning',
+    descAr: 'قال ﷺ: "ذروني ما تركتكم، فإنما هلك من كان قبلكم بسؤالهم واختلافهم على أنبيائهم" [متفق عليه]',
+    descEn: '"Leave me as long as I leave you. Those before you were destroyed by their excessive questions." [Agreed upon]',
+    ref: 'مكروه',
+  ),
+  // ───── آداب عامة ─────
+  GuidanceItem(
+    titleAr: 'الإسراف في استخدام الماء',
+    titleEn: 'Wasting Water',
+    descAr: '﴿وَكُلُوا وَاشْرَبُوا وَلَا تُسْرِفُوا إِنَّهُ لَا يُحِبُّ الْمُسْرِفِينَ﴾ [الأعراف: 31]',
+    descEn: '"Eat and drink, but be not excessive. Indeed, He does not like those who commit excess." [Al-Araf: 31]',
+    ref: 'مكروه، قد يصل للتحريم',
+  ),
+  GuidanceItem(
+    titleAr: 'النوم على البطن',
+    titleEn: 'Sleeping on the Stomach',
+    descAr: 'ورد النهي عنه في حديث يعقوب بن إسحاق. (توجد تفاصيل في درجة الحديث عند العلماء)',
+    descEn: 'It has been prohibited in a hadith. (Scholars differ on its grading)',
+    ref: 'مكروه',
+  ),
+];
+
+// ═══════════════ الأشياء التي لا يجوز فعلها (30 عنصرًا) ═══════════════
+const List<GuidanceItem> forbiddenList = [
+  // ───── العقيدة ─────
+  GuidanceItem(
+    titleAr: 'الشرك بالله',
+    titleEn: 'Shirk (Polytheism)',
+    descAr: 'لا يجوز صرف شيء من العبادة لغير الله كدعاء غير الله أو الذبح لغير الله. ﴿إِنَّ اللَّهَ لَا يَغْفِرُ أَنْ يُشْرَكَ بِهِ﴾ [النساء: 48]',
+    descEn: 'Directing any worship to other than Allah. [An-Nisa: 48]',
+    ref: 'أكبر الكبائر',
+  ),
+  GuidanceItem(
+    titleAr: 'السحر',
+    titleEn: 'Magic & Sorcery',
+    descAr: 'لا يجوز تعلم السحر أو تعاطيه أو ممارسته. ﴿وَلَٰكِنَّ الشَّيَاطِينَ كَفَرُوا يُعَلِّمُونَ النَّاسَ السِّحْرَ﴾ [البقرة: 102]',
+    descEn: 'Learning or practicing magic. [Al-Baqarah: 102]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'الذبح لغير الله',
+    titleEn: 'Sacrificing for Other Than Allah',
+    descAr: '﴿قُلْ إِنَّ صَلَاتِي وَنُسُكِي وَمَحْيَايَ وَمَمَاتِي لِلَّهِ رَبِّ الْعَالَمِينَ﴾ [الأنعام: 162]',
+    descEn: 'Sacrificing to other than Allah. [Al-An\'am: 162]',
+    ref: 'شرك أكبر',
+  ),
+  // ───── الدماء ─────
+  GuidanceItem(
+    titleAr: 'قتل النفس بغير حق',
+    titleEn: 'Murder',
+    descAr: '﴿وَلَا تَقْتُلُوا النَّفْسَ الَّتِي حَرَّمَ اللَّهُ إِلَّا بِالْحَقِّ﴾ [الإسراء: 33]',
+    descEn: '"Do not kill the soul which Allah has forbidden, except by right." [Al-Isra: 33]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'الانتحار',
+    titleEn: 'Suicide',
+    descAr: '﴿وَلَا تَقْتُلُوا أَنْفُسَكُمْ إِنَّ اللَّهَ كَانَ بِكُمْ رَحِيمًا﴾ [النساء: 29]',
+    descEn: '"And do not kill yourselves. Indeed, Allah is to you ever Merciful." [An-Nisa: 29]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الأموال والمعاملات ─────
+  GuidanceItem(
+    titleAr: 'الربا',
+    titleEn: 'Riba (Usury)',
+    descAr: '﴿وَأَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا﴾ [البقرة: 275]. قال ﷺ: "لعن رسول الله ﷺ آكل الربا وموكله" [مسلم]',
+    descEn: '"Allah has permitted trade and forbidden Riba." [Al-Baqarah: 275]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'السرقة',
+    titleEn: 'Theft',
+    descAr: '﴿وَالسَّارِقُ وَالسَّارِقَةُ فَاقْطَعُوا أَيْدِيَهُمَا﴾ [المائدة: 38]',
+    descEn: '"The male and female thief — cut off their hands." [Al-Ma\'idah: 38]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'أكل أموال الناس بالباطل',
+    titleEn: 'Consuming Wealth Unlawfully',
+    descAr: '﴿وَلَا تَأْكُلُوا أَمْوَالَكُمْ بَيْنَكُمْ بِالْبَاطِلِ﴾ [البقرة: 188]',
+    descEn: '"Do not consume one another\'s wealth unjustly." [Al-Baqarah: 188]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'الرشوة',
+    titleEn: 'Bribery',
+    descAr: 'قال ﷺ: "لعن الله الراشي والمرتشي" [الترمذي]',
+    descEn: '"Allah cursed the one who gives a bribe and the one who takes it." [At-Tirmidhi]',
+    ref: 'ملعون فاعله',
+  ),
+  GuidanceItem(
+    titleAr: 'الغش',
+    titleEn: 'Deception in Trade',
+    descAr: 'قال ﷺ: "من غَشَّنا فليس منا" [مسلم]',
+    descEn: '"Whoever deceives us is not one of us." [Muslim]',
+    ref: 'صحيح مسلم',
+  ),
+  GuidanceItem(
+    titleAr: 'أكل مال اليتيم',
+    titleEn: 'Consuming Orphan\'s Wealth',
+    descAr: '﴿إِنَّ الَّذِينَ يَأْكُلُونَ أَمْوَالَ الْيَتَامَىٰ ظُلْمًا إِنَّمَا يَأْكُلُونَ فِي بُطُونِهِمْ نَارًا﴾ [النساء: 10]',
+    descEn: '"Those who devour orphan\'s wealth unjustly consume fire into their bellies." [An-Nisa: 10]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'الميسر والقمار',
+    titleEn: 'Gambling',
+    descAr: '﴿إِنَّمَا الْخَمْرُ وَالْمَيْسِرُ ... رِجْسٌ مِنْ عَمَلِ الشَّيْطَانِ فَاجْتَنِبُوهُ﴾ [المائدة: 90]',
+    descEn: '"Intoxicants and gambling are defilement from the work of Shaytan, so avoid it." [Al-Ma\'idah: 90]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'منع الناس من حقوقهم',
+    titleEn: 'Withholding People\'s Rights',
+    descAr: 'لا يجوز ظلم الناس ومنعهم حقوقهم بغير حق.',
+    descEn: 'Preventing people from their rights unjustly.',
+    ref: 'من الظلم المحرم',
+  ),
+  GuidanceItem(
+    titleAr: 'اليمين الكاذبة لأخذ المال',
+    titleEn: 'False Oath to Take Wealth',
+    descAr: 'قال ﷺ: "من حلف على يمين صبر يقتطع بها مال امرئ مسلم هو فيها فاجر لقي الله وهو عليه غضبان" [متفق عليه]',
+    descEn: '"Whoever swears a false oath to take a Muslim\'s wealth will meet Allah while He is angry with him." [Agreed upon]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الطعام والشراب ─────
+  GuidanceItem(
+    titleAr: 'الخمر والمخدرات',
+    titleEn: 'Alcohol & Drugs',
+    descAr: '﴿إِنَّمَا الْخَمْرُ وَالْمَيْسِرُ ... رِجْسٌ مِنْ عَمَلِ الشَّيْطَانِ فَاجْتَنِبُوهُ﴾ [المائدة: 90]',
+    descEn: '"Intoxicants... are defilement from the work of Shaytan, so avoid it." [Al-Ma\'idah: 90]',
+    ref: 'أم الخبائث',
+  ),
+  GuidanceItem(
+    titleAr: 'لحم الخنزير',
+    titleEn: 'Pork',
+    descAr: '﴿إِنَّمَا حَرَّمَ عَلَيْكُمُ الْمَيْتَةَ وَالدَّمَ وَلَحْمَ الْخِنزِيرِ﴾ [البقرة: 173]',
+    descEn: '"He has only forbidden you dead animals, blood, and swine flesh." [Al-Baqarah: 173]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'الميتة',
+    titleEn: 'Dead Meat',
+    descAr: '﴿حُرِّمَتْ عَلَيْكُمُ الْمَيْتَةُ وَالدَّمُ وَلَحْمُ الْخِنزِيرِ﴾ [المائدة: 3]',
+    descEn: '"Forbidden to you are dead animals, blood, and swine flesh." [Al-Ma\'idah: 3]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'الدم المسفوح',
+    titleEn: 'Flowing Blood',
+    descAr: '﴿أَوْ دَمًا مَسْفُوحًا أَوْ لَحْمَ خِنزِيرٍ فَإِنَّهُ رِجْسٌ﴾ [الأنعام: 145]',
+    descEn: '"Or flowing blood or swine flesh — indeed, it is defilement." [Al-An\'am: 145]',
+    ref: 'محرم بنص القرآن',
+  ),
+  // ───── العلاقات والأعراض ─────
+  GuidanceItem(
+    titleAr: 'الزنا',
+    titleEn: 'Adultery',
+    descAr: '﴿وَلَا تَقْرَبُوا الزِّنَا إِنَّهُ كَانَ فَاحِشَةً وَسَاءَ سَبِيلًا﴾ [الإسراء: 32]',
+    descEn: '"Do not approach unlawful sexual intercourse. Indeed, it is an immorality and evil way." [Al-Isra: 32]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'قذف المحصنات',
+    titleEn: 'Accusing Chaste Women',
+    descAr: '﴿وَالَّذِينَ يَرْمُونَ الْمُحْصَنَاتِ ثُمَّ لَمْ يَأْتُوا بِأَرْبَعَةِ شُهَدَاءَ فَاجْلِدُوهُمْ ثَمَانِينَ جَلْدَةً﴾ [النور: 4]',
+    descEn: '"Those who accuse chaste women and do not bring four witnesses — flog them eighty lashes." [An-Nur: 4]',
+    ref: 'من السبع الموبقات',
+  ),
+  // ───── الأسرة ─────
+  GuidanceItem(
+    titleAr: 'عقوق الوالدين',
+    titleEn: 'Disobeying Parents',
+    descAr: 'قال ﷺ: "ألا أنبئكم بأكبر الكبائر؟ ... وعقوق الوالدين" [متفق عليه]',
+    descEn: '"Shall I not inform you of the greatest sins? ... And disobeying parents." [Agreed upon]',
+    ref: 'من أكبر الكبائر',
+  ),
+  GuidanceItem(
+    titleAr: 'قطيعة الرحم',
+    titleEn: 'Severing Family Ties',
+    descAr: 'قال ﷺ: "لا يدخل الجنة قاطع" [متفق عليه]',
+    descEn: '"The one who severs family ties will not enter Paradise." [Agreed upon]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'الزواج من المحارم',
+    titleEn: 'Incestuous Marriage',
+    descAr: '﴿حُرِّمَتْ عَلَيْكُمْ أُمَّهَاتُكُمْ وَبَنَاتُكُمْ وَأَخَوَاتُكُمْ...﴾ [النساء: 23]',
+    descEn: '"Forbidden to you are your mothers, your daughters, your sisters..." [An-Nisa: 23]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'الجمع بين المرأة وأختها',
+    titleEn: 'Marrying Two Sisters',
+    descAr: '﴿وَأَنْ تَجْمَعُوا بَيْنَ الْأُخْتَيْنِ إِلَّا مَا قَدْ سَلَفَ﴾ [النساء: 23]',
+    descEn: '"And that you combine between two sisters, except what has already passed." [An-Nisa: 23]',
+    ref: 'محرم بنص القرآن',
+  ),
+  // ───── اللسان والكلام ─────
+  GuidanceItem(
+    titleAr: 'الكذب',
+    titleEn: 'Lying',
+    descAr: 'قال ﷺ: "وإياكم والكذب، فإن الكذب يهدي إلى الفجور، وإن الفجور يهدي إلى النار" [متفق عليه]',
+    descEn: '"Beware of lying, for lying leads to immorality, and immorality leads to the Fire." [Agreed upon]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'شهادة الزور',
+    titleEn: 'False Testimony',
+    descAr: 'قال ﷺ: "ألا وقول الزور" [متفق عليه]',
+    descEn: '"Behold, and false testimony." [Agreed upon]',
+    ref: 'من السبع الموبقات',
+  ),
+  GuidanceItem(
+    titleAr: 'الغيبة',
+    titleEn: 'Backbiting',
+    descAr: '﴿وَلَا يَغْتَبْ بَعْضُكُمْ بَعْضًا﴾ [الحجرات: 12]',
+    descEn: '"And do not backbite one another." [Al-Hujurat: 12]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'النميمة',
+    titleEn: 'Gossip (Namimah)',
+    descAr: 'قال ﷺ: "لا يدخل الجنة قتات" [متفق عليه]',
+    descEn: '"The gossiper will not enter Paradise." [Agreed upon]',
+    ref: 'من كبائر الذنوب',
+  ),
+  // ───── الأخلاق ─────
+  GuidanceItem(
+    titleAr: 'الظلم',
+    titleEn: 'Injustice',
+    descAr: 'قال ﷺ: "إني حرمت الظلم على نفسي وجعلته بينكم محرما فلا تظالموا" [مسلم]',
+    descEn: '"I have forbidden injustice for Myself and made it forbidden among you." [Muslim]',
+    ref: 'صحيح مسلم',
+  ),
+  GuidanceItem(
+    titleAr: 'التجسس',
+    titleEn: 'Spying on People',
+    descAr: '﴿وَلَا تَجَسَّسُوا﴾ [الحجرات: 12]',
+    descEn: '"And do not spy on one another." [Al-Hujurat: 12]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'السخرية من الناس',
+    titleEn: 'Mocking People',
+    descAr: '﴿لَا يَسْخَرْ قَوْمٌ مِنْ قَوْمٍ عَسَى أَنْ يَكُونُوا خَيْرًا مِنْهُمْ﴾ [الحجرات: 11]',
+    descEn: '"Let not a people mock another; perhaps they may be better than them." [Al-Hujurat: 11]',
+    ref: 'محرم بنص القرآن',
+  ),
+  GuidanceItem(
+    titleAr: 'الخيانة',
+    titleEn: 'Betrayal',
+    descAr: '﴿لَا تَخُونُوا اللَّهَ وَالرَّسُولَ وَتَخُونُوا أَمَانَاتِكُمْ﴾ [الأنفال: 27]',
+    descEn: '"Do not betray Allah and the Messenger, nor betray your trusts." [Al-Anfal: 27]',
+    ref: 'من كبائر الذنوب',
+  ),
+  GuidanceItem(
+    titleAr: 'إيذاء الجار',
+    titleEn: 'Harming the Neighbor',
+    descAr: 'قال ﷺ: "والله لا يؤمن ... الذي لا يأمن جاره بوائقه" [متفق عليه]',
+    descEn: '"By Allah he does not believe — the one whose neighbor is not safe from his harm." [Agreed upon]',
+    ref: 'متفق عليه',
+  ),
+  GuidanceItem(
+    titleAr: 'الرشوة والمحاباة بالباطل',
+    titleEn: 'Favoritism & Unjust Bribes',
+    descAr: 'لا يجوز تقديم شخص على آخر بغير حق أو تغيير الحقوق بالمال.',
+    descEn: 'Favoring someone unjustly or changing rights through wealth.',
+    ref: 'من الظلم المحرم',
+  ),
+  GuidanceItem(
+    titleAr: 'الفرار من المسؤولية والواجبات',
+    titleEn: 'Avoiding Responsibilities',
+    descAr: 'لا يجوز التهرب من الواجبات والمسؤوليات الشرعية على وجه يضر بالآخرين.',
+    descEn: 'Avoiding religious duties in a way that harms others.',
+    ref: 'من الظلم',
+  ),
+];

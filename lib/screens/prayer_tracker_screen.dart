@@ -60,7 +60,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
       builder: (context, lang, _) {
         final isAr = lang == 'ar';
         return Scaffold(
-          backgroundColor: const Color(0xFF0B2B26),
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: const Color(0xFF143B32),
             title: Text(LanguageManager.t('prayer_tracker_title'),
@@ -95,7 +95,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
                             child: CircularProgressIndicator(
                               value: _todayCount() / 5,
                               strokeWidth: 8,
-                              backgroundColor: const Color(0xFF0B2B26),
+                              backgroundColor: Colors.transparent,
                               valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFD4AF37)),
                             ),
                           ),
@@ -274,7 +274,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
               child: LinearProgressIndicator(
                 value: progress,
                 minHeight: 8,
-                backgroundColor: const Color(0xFF0B2B26),
+                backgroundColor: Colors.transparent,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   count == 5 ? const Color(0xFFD4AF37) : const Color(0xFF4ECDC4),
                 ),
