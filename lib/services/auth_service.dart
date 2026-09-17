@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'firestore_user_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -10,6 +11,11 @@ class AuthService {
   Future<String?> signInWithEmail(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email.trim(), password: password);
+      try {
+        await FirestoreUserService.createOrUpdateCurrentUser();
+      } catch (e) {
+        print('Firestore user sync error: $e');
+      }
       return null;
     } on FirebaseAuthException catch (e) {
       return _errorMessage(e.code);
@@ -26,6 +32,11 @@ class AuthService {
       );
       await cred.user?.updateDisplayName(name);
       await cred.user?.reload();
+      try {
+        await FirestoreUserService.createOrUpdateCurrentUser();
+      } catch (e) {
+        print('Firestore user sync error: $e');
+      }
       return null;
     } on FirebaseAuthException catch (e) {
       return _errorMessage(e.code);
